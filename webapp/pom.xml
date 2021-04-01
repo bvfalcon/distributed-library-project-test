@@ -74,7 +74,7 @@
 		<dependency>
 			<groupId>com.github.bvfalcon</groupId>
 			<artifactId>fakesmtp4junit</artifactId>
-			<version>master-SNAPSHOT</version>
+			<version>1.0.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
