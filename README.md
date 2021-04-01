@@ -1,2 +1,2 @@
 # distributed-library-project-test
-Test for distributed-library-project
+Tests for distributed-library-project
