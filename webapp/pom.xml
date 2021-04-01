@@ -3,7 +3,6 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>webapp-test</artifactId>
-	<packaging>war</packaging>
 
 	<parent>
 		<groupId>name.bychkov.dlp</groupId>
@@ -17,10 +16,6 @@
 
 	<repositories>
 		<repository>
-			<id>primefaces</id>
-			<url>https://repository.primefaces.org/</url>
-		</repository>
-		<repository>
 			<id>jboss-repo</id>
 			<url>https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/</url>
 		</repository>
@@ -31,16 +26,6 @@
 	</repositories>
 	
 	<dependencies>
-		<dependency>
-			<groupId>org.omnifaces</groupId>
-			<artifactId>omnifaces</artifactId>
-			<version>3.10.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.primefaces</groupId>
-			<artifactId>primefaces</artifactId>
-			<version>8.0</version>
-		</dependency>
 		<dependency>
 			<groupId>org.omnifaces</groupId>
 			<artifactId>facesconfig-parser</artifactId>
@@ -92,17 +77,36 @@
 				<version>3.1.2</version>
 				<executions>
 					<execution>
-						<id>unpack-webapp</id>
+						<id>copy-webapp</id>
 						<phase>generate-resources</phase>
 						<goals>
-							<goal>unpack</goal>
+							<goal>copy</goal>
 						</goals>
 						<configuration>
 							<artifactItems>
 								<artifactItem>
 									<groupId>name.bychkov.dlp</groupId>
 									<artifactId>webapp</artifactId>
-									<version>1.0.0-SNAPSHOT</version>
+									<version>${project.version}</version>
+									<type>war</type>
+									<outputDirectory>${project.build.directory}</outputDirectory>
+									<destFileName>${war.name}</destFileName>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+					<execution>
+						<id>unpack-webapp</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>unpack-webapp</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>name.bychkov.dlp</groupId>
+									<artifactId>webapp</artifactId>
+									<version>${project.version}</version>
 									<type>war</type>
 									<overWrite>false</overWrite>
 									<outputDirectory>${project.build.directory}/classes</outputDirectory>
@@ -129,7 +133,7 @@
 						<configuration>
 							<jbossHome>${jbossHome}</jbossHome>
 							<name>dlp-dev.war</name>
-							<filename>${war.name}.war</filename>
+							<filename>${war.name}</filename>
 							<serverConfig>standalone-test.xml</serverConfig>
 							<env>
 								<DB_HOST>${DB_HOST}</DB_HOST>
