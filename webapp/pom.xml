@@ -99,7 +99,7 @@
 						<id>unpack-webapp</id>
 						<phase>generate-resources</phase>
 						<goals>
-							<goal>unpack-webapp</goal>
+							<goal>unpack</goal>
 						</goals>
 						<configuration>
 							<artifactItems>
@@ -110,7 +110,7 @@
 									<type>war</type>
 									<overWrite>false</overWrite>
 									<outputDirectory>${project.build.directory}/classes</outputDirectory>
-									<includes>**/*.xml,**/*.properties</includes>
+									<includes>**/*.xml,**/*.properties,**/*.txt</includes>
 								</artifactItem>
 							</artifactItems>
 						</configuration>
