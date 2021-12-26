@@ -1,10 +1,10 @@
 package name.bychkov.dlp;
 
 import org.openqa.selenium.support.FindBy;
-import org.primefaces.extensions.selenium.AbstractPrimePage;
-import org.primefaces.extensions.selenium.component.CommandButton;
-import org.primefaces.extensions.selenium.component.InputText;
-import org.primefaces.extensions.selenium.component.SelectBooleanCheckbox;
+import org.primefaces.selenium.AbstractPrimePage;
+import org.primefaces.selenium.component.CommandButton;
+import org.primefaces.selenium.component.InputText;
+import org.primefaces.selenium.component.SelectBooleanCheckbox;
 
 import lombok.Getter;
 

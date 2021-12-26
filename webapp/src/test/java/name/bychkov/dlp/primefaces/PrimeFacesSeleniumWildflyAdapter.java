@@ -1,14 +1,10 @@
 package name.bychkov.dlp.primefaces;
 
-import org.openqa.selenium.WebDriver;
-import org.primefaces.extensions.selenium.spi.PrimeSeleniumAdapter;
+import org.primefaces.selenium.spi.DeploymentAdapter;
 
-public abstract class PrimeFacesSeleniumWildflyAdapter implements PrimeSeleniumAdapter
+public class PrimeFacesSeleniumWildflyAdapter implements DeploymentAdapter
 {
 	@Override
-	public abstract WebDriver createWebDriver();
-
-      	@Override
 	public String getBaseUrl()
 	{
 		return "http://localhost:8080/dlp-dev/";

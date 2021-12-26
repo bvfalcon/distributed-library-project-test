@@ -5,10 +5,10 @@ import javax.mail.MessagingException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.primefaces.extensions.selenium.AbstractPrimePageTest;
-import org.primefaces.extensions.selenium.component.CommandButton;
-import org.primefaces.extensions.selenium.component.InputText;
-import org.primefaces.extensions.selenium.component.SelectBooleanCheckbox;
+import org.primefaces.selenium.AbstractPrimePageTest;
+import org.primefaces.selenium.component.CommandButton;
+import org.primefaces.selenium.component.InputText;
+import org.primefaces.selenium.component.SelectBooleanCheckbox;
 
 import name.bychkov.junit5.FakeSmtpJUnitExtension;
 
