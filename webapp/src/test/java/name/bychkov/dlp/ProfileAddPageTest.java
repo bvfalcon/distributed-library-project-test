@@ -1,5 +1,7 @@
 package name.bychkov.dlp;
 
+import javax.mail.MessagingException;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -8,17 +10,15 @@ import org.primefaces.extensions.selenium.component.CommandButton;
 import org.primefaces.extensions.selenium.component.InputText;
 import org.primefaces.extensions.selenium.component.SelectBooleanCheckbox;
 
-import com.nilhcem.fakesmtp.FakeSMTP;
-
-import name.bychkov.fakesmtp.FakeSmtpJUnitExcension;
+import name.bychkov.junit5.FakeSmtpJUnitExtension;
 
 public class ProfileAddPageTest extends AbstractPrimePageTest {
 
 	@RegisterExtension
-	static FakeSmtpJUnitExcension s = new FakeSmtpJUnitExcension().port(Integer.valueOf(System.getenv("SMTP_PORT")));
+	static FakeSmtpJUnitExtension smtp = new FakeSmtpJUnitExtension().port(Integer.valueOf(System.getenv("SMTP_PORT")));
 
 	@Test
-	public void testSuccess(ProfileAddPage profileAddPage) throws InterruptedException {
+	public void testSuccess(ProfileAddPage profileAddPage) throws InterruptedException, MessagingException {
 		Thread.sleep(2000);
 		Assertions.assertTrue(profileAddPage.isAt());
 
@@ -40,7 +40,7 @@ public class ProfileAddPageTest extends AbstractPrimePageTest {
 		CommandButton button = profileAddPage.getSave();
 		button.click();
 
-		Assertions.assertEquals(1, FakeSMTP.getEmails().size());
+		Assertions.assertEquals(1, smtp.getMessages().size());
 
 		assertIsAt("profile-add/profile-approve-requested.xhtml");
 	}
