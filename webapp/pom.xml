@@ -1,6 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>webapp-test</artifactId>
 
@@ -11,7 +9,7 @@
 	</parent>
 
 	<properties>
-		<war.name>dlp-${project.version}</war.name>
+		<war.name>dlp-${project.version}.jar</war.name>
 	</properties>
 
 	<repositories>
@@ -20,7 +18,7 @@
 			<url>https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/</url>
 		</repository>
 	</repositories>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.omnifaces</groupId>
@@ -43,7 +41,7 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.8.2</version>
+			<version>5.9.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -68,7 +66,6 @@
 		</resources>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>3.1.2</version>
 				<executions>
@@ -82,82 +79,50 @@
 							<artifactItems>
 								<artifactItem>
 									<groupId>name.bychkov.dlp</groupId>
-									<artifactId>webapp</artifactId>
+									<artifactId>dlp-webapp</artifactId>
 									<version>${project.version}</version>
-									<type>war</type>
+									<type>jar</type>
+									<classifier>bootable</classifier>
 									<outputDirectory>${project.build.directory}</outputDirectory>
 									<destFileName>${war.name}</destFileName>
 								</artifactItem>
 							</artifactItems>
 						</configuration>
 					</execution>
-					<execution>
-						<id>unpack-webapp</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>unpack</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>name.bychkov.dlp</groupId>
-									<artifactId>webapp</artifactId>
-									<version>${project.version}</version>
-									<type>war</type>
-									<overWrite>false</overWrite>
-									<outputDirectory>${project.build.directory}/classes</outputDirectory>
-									<includes>**/*.xml,**/*.properties,**/*.txt</includes>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.wildfly.plugins</groupId>
-				<artifactId>wildfly-maven-plugin</artifactId>
-				<version>2.1.0.Final</version>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.1.0</version>
 				<executions>
 					<execution>
-						<id>wildfly-start</id>
 						<phase>pre-integration-test</phase>
 						<goals>
-							<goal>start</goal>
-							<goal>deploy</goal>
+							<goal>exec</goal>
 						</goals>
-						<inherited>false</inherited>
-						<configuration>
-							<jbossHome>${jbossHome}</jbossHome>
-							<name>dlp-dev.war</name>
-							<filename>${war.name}</filename>
-							<serverConfig>standalone-test.xml</serverConfig>
-							<env>
-								<DB_HOST>${DB_HOST}</DB_HOST>
-								<DB_PASSWORD>${DB_PASSWORD}</DB_PASSWORD>
-								<DB_PORT>${DB_PORT}</DB_PORT>
-								<DLP_SALT>${DLP_SALT}</DLP_SALT>
-								<SMTP_PORT>${SMTP_PORT}</SMTP_PORT>
-							</env>
-						</configuration>
-					</execution>
-					<execution>
-						<id>wildfly-shutdown</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>undeploy</goal>
-							<goal>shutdown</goal>
-						</goals>
-						<inherited>false</inherited>
-						<configuration>
-							<name>dlp-dev.war</name>
-						</configuration>
 					</execution>
 				</executions>
+				<configuration>
+					<executable>java</executable>
+					<workingDirectory>${project.build.directory}</workingDirectory>
+					<arguments>
+						<argument>-jar</argument>
+						<argument>${war.name}</argument>
+						<argument>-Djboss.mail.server.username=test</argument>
+						<argument>-Djboss.mail.server.password=test</argument>
+						<argument>-Dname.bychkov.dlp.salt=crypto-salt</argument>
+					</arguments>
+					<environmentVariables>
+						<MYSQL_USER>root</MYSQL_USER>
+						<MYSQL_DATABASE>dlp</MYSQL_DATABASE>
+						<MYSQL_PASSWORD>password</MYSQL_PASSWORD>
+					</environmentVariables>
+				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.2</version>
+				<version>3.0.0-M7</version>
 				<executions>
 					<execution>
 						<id>default-test</id>
@@ -169,7 +134,7 @@
 							<skipTests>true</skipTests>
 						</configuration>
 					</execution>
-					<execution>
+					<!--execution>
 						<id>unit-tests</id>
 						<phase>test</phase>
 						<goals>
@@ -180,7 +145,7 @@
 								<include>**/*UnitTest</include>
 							</includes>
 						</configuration>
-					</execution>
+					</execution-->
 					<execution>
 						<id>gui-tests</id>
 						<phase>integration-test</phase>
@@ -189,7 +154,7 @@
 						</goals>
 						<configuration>
 							<environmentVariables>
-								<SMTP_PORT>${SMTP_PORT}</SMTP_PORT>
+								<SMTP_PORT>2021</SMTP_PORT>
 							</environmentVariables>
 							<includes>
 								<include>**/*PageTest</include>
